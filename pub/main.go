@@ -17,17 +17,19 @@ func main() {
 		fmt.Fprintf(os.Stderr, "%v", "pub [FILE]")
 		return
 	}
+	filename := &(os.Args[1])
 
 	// Establish connection with nats-streaming server
-	if conn, err = stan.Connect("test-cluster", "publisher", stan.NatsURL("127.0.0.1:4222")); err != nil {
+	conn, err = stan.Connect("test-cluster", "publisher", stan.NatsURL("127.0.0.1:4222"))
+	if err != nil {
 		fmt.Fprintf(os.Stderr, "%v", err)
 		return
 	}
 	defer conn.Close()
 
 	// Read file
-	filename := &(os.Args[1])
-	if text, err = os.ReadFile(*filename); err != nil {
+	text, err = os.ReadFile(*filename)
+	if err != nil {
 		fmt.Fprintf(os.Stderr, "%v", err)
 		return
 	}
