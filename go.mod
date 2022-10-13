@@ -3,6 +3,7 @@ module wbintern/l0
 go 1.19
 
 require (
+	github.com/BurntSushi/toml v1.2.0 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/nats-io/nats.go v1.16.0 // indirect
 	github.com/nats-io/nkeys v0.3.0 // indirect
