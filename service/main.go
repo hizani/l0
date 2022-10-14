@@ -49,7 +49,6 @@ func main() {
 	ch = cache.New()
 	err = ch.Restore(db)
 	checkError(err)
-	fmt.Println(ch)
 
 	// Subscribe to nats streaming channel
 	conn, err := stan.Connect(cfg.Stan.Clusterid, cfg.Stan.Userid, stan.NatsURL(cfg.Stan.Host))
