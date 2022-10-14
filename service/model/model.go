@@ -6,6 +6,11 @@ import (
 )
 
 type OrderModel struct {
+	Uid  string
+	Json OrderJson
+}
+
+type OrderJson struct {
 	OrderUid    string `json:"order_uid" validate:"required,min=1"`
 	TrackNumber string `json:"track_number" validate:"required"`
 	Entry       string `json:"entry" validate:"required"`
@@ -54,7 +59,10 @@ type OrderModel struct {
 }
 
 func NewFromByte(value []byte) (*OrderModel, error) {
+	var oj OrderJson
 	var om OrderModel
-	err := json.Unmarshal(value, &om)
+	err := json.Unmarshal(value, &oj)
+	om.Uid = oj.OrderUid
+	om.Json = oj
 	return &om, err
 }
