@@ -9,12 +9,12 @@ import (
 
 // Database connection
 type Database struct {
-	Connection *pgx.Conn
+	*pgx.Conn
 }
 
 // Insert an order into a database
 func (db *Database) InsertOrder(om model.OrderModel) error {
-	_, err := db.Connection.Exec(context.Background(), `insert into orders (id, data) values ($1, $2)`, om.Uid, om.Json)
+	_, err := db.Exec(context.Background(), `insert into orders (id, data) values ($1, $2)`, om.Uid, om.Json)
 	return err
 }
 
@@ -25,13 +25,13 @@ func Connect(connStr string) (*Database, error) {
 	if err != nil {
 		return &database, err
 	}
-	database.Connection = dbconn
+	database = Database{dbconn}
 	return &database, err
 }
 
 // Return all orders from a database as a slice
 func (db *Database) GetOrders() ([]model.OrderModel, error) {
-	raw, err := db.Connection.Query(context.Background(), `select * from orders`)
+	raw, err := db.Query(context.Background(), `select * from orders`)
 	if err != nil {
 		return []model.OrderModel{}, err
 	}

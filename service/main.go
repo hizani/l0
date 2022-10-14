@@ -43,7 +43,7 @@ func main() {
 		fmt.Sprintf("postgres://%v:%v@%v:%v/%v", cfg.Database.User, cfg.Database.Pass, cfg.Database.Host, cfg.Database.Port, cfg.Database.Db)
 	db, err = database.Connect(connStr)
 	checkError(err)
-	defer db.Connection.Close(context.Background())
+	defer db.Close(context.Background())
 
 	// Initialize cache store
 	ch = cache.New()
