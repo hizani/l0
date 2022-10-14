@@ -10,22 +10,28 @@ type (
 	Config struct {
 		Stan     Stan
 		Database Database
+		Server   Server
 	}
 
 	Stan struct {
 		Clusterid string
 		Userid    string
 		Host      string
+		Port      int
 		Channel   string
 	}
 
 	Database struct {
-		Host   string
-		Port   string
-		User   string
-		Pass   string
-		Db     string
-		Driver string
+		Host string
+		Port int
+		User string
+		Pass string
+		Db   string
+	}
+
+	Server struct {
+		Host string
+		Port int
 	}
 )
 

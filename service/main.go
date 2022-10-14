@@ -40,7 +40,7 @@ func main() {
 
 	// Establish DB connection
 	connStr :=
-		fmt.Sprintf("postgres://%v:%v@%v:%v/%v", cfg.Database.User, cfg.Database.Pass, cfg.Database.Host, cfg.Database.Port, cfg.Database.Db)
+		fmt.Sprintf("postgres://%s:%s@%s:%d/%s", cfg.Database.User, cfg.Database.Pass, cfg.Database.Host, cfg.Database.Port, cfg.Database.Db)
 	db, err = database.Connect(connStr)
 	checkError(err)
 	defer db.Close(context.Background())
@@ -51,7 +51,8 @@ func main() {
 	checkError(err)
 
 	// Subscribe to nats streaming channel
-	conn, err := stan.Connect(cfg.Stan.Clusterid, cfg.Stan.Userid, stan.NatsURL(cfg.Stan.Host))
+	natsUrl := fmt.Sprintf("%s:%d", cfg.Stan.Host, cfg.Stan.Port)
+	conn, err := stan.Connect(cfg.Stan.Clusterid, cfg.Stan.Userid, stan.NatsURL(natsUrl))
 	checkError(err)
 	defer conn.Close()
 

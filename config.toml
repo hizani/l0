@@ -1,12 +1,17 @@
 [stan]
 clusterid = "test-cluster"
 userid = "service"
-host = "127.0.0.1:4222"
+host = "127.0.0.1"
+port = 4222
 channel = "chan"
 
 [database]
 host = "localhost"
-port = "5432"
+port = 5432
 user = "admin"
 pass = "admin"
 db = "l0"
+
+[server]
+host = "localhost"
+port = 8080
