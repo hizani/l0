@@ -6,19 +6,16 @@ import (
 )
 
 // Cache for orders
-type Cache struct {
-	Data map[string]model.OrderModel
-}
+type Cache map[string]model.OrderModel
 
 // Initialize cache
 func New() Cache {
-	var c Cache
-	c.Data = make(map[string]model.OrderModel)
+	c := make(Cache)
 	return c
 }
 
 // Restore cache from a database
-func (c *Cache) Restore(db *database.Database) error {
+func (c Cache) Restore(db *database.Database) error {
 	orders, err := db.GetOrders()
 	if err != nil {
 		return err
@@ -30,6 +27,11 @@ func (c *Cache) Restore(db *database.Database) error {
 }
 
 // Add new order into cache
-func (c *Cache) Add(om model.OrderModel) {
-	c.Data[om.Uid] = om
+func (c Cache) Add(om model.OrderModel) {
+	c[om.Uid] = om
+}
+
+// Get model.OrderModel from cache
+func (c Cache) GetOrderById(id string) model.OrderModel {
+	return c[id]
 }
