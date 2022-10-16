@@ -5,12 +5,12 @@ import (
 	"errors"
 	"fmt"
 	"log"
-	"net/http"
 	"os"
 	"wbintern/l0/service/cache"
 	"wbintern/l0/service/config"
 	"wbintern/l0/service/database"
 	"wbintern/l0/service/model"
+	"wbintern/l0/service/server"
 
 	"github.com/nats-io/stan.go"
 )
@@ -61,7 +61,11 @@ func main() {
 	defer sub.Close()
 
 	// Start HTTP server
-	http.ListenAndServe(":8080", nil)
+	address := fmt.Sprintf("%s:%d", cfg.Server.Host, cfg.Server.Port)
+	fmt.Println(address)
+	srv := server.New(address, ch)
+	srv.ListenAndServe()
+
 }
 
 func checkError(err error) {
