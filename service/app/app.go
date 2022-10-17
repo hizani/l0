@@ -96,7 +96,7 @@ func (a *App) messageHandler(msg *stan.Msg) {
 	// Add to cache
 	data, err := model.NewFromByte(msg.Data)
 	if err != nil {
-		log.Println("Can't cache message: ", err)
+		log.Println("Can't handle message: ", err)
 		return
 	}
 	a.ch.Add(*data)
@@ -104,6 +104,5 @@ func (a *App) messageHandler(msg *stan.Msg) {
 	err = a.db.InsertOrder(*data)
 	if err != nil {
 		log.Println("Can't insert data into database: ", err)
-		return
 	}
 }
