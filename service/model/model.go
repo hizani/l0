@@ -2,6 +2,9 @@ package model
 
 import (
 	"encoding/json"
+	"errors"
+	"reflect"
+	"strings"
 	"time"
 )
 
@@ -25,7 +28,7 @@ type OrderJson struct {
 	} `json:"delivery" validate:"required"`
 	Payment struct {
 		Transaction  string `json:"transaction" validate:"required"`
-		RequestId    string `json:"request_id" validate:"required"`
+		RequestId    string `json:"request_id"`
 		Currency     string `json:"currency" validate:"required"`
 		Provider     string `json:"provider" validate:"required"`
 		Amount       int    `json:"amount" validate:"required"`
@@ -49,7 +52,7 @@ type OrderJson struct {
 		Status      int    `json:"status" validate:"required"`
 	} `json:"items" validate:"required"`
 	Locale            string    `json:"locale" validate:"required"`
-	InternalSignature string    `json:"internal_signature" validate:"required"`
+	InternalSignature string    `json:"internal_signature"`
 	CustomerId        string    `json:"customer_id" validate:"required"`
 	DeliveryService   string    `json:"delivery_service" validate:"required"`
 	Shardkey          string    `json:"shardkey" validate:"required"`
@@ -62,6 +65,16 @@ func NewFromByte(value []byte) (*OrderModel, error) {
 	var oj OrderJson
 	var om OrderModel
 	err := json.Unmarshal(value, &oj)
+
+	fields := reflect.ValueOf(&oj).Elem()
+	for i := 0; i < fields.NumField(); i++ {
+		tag := fields.Type().Field(i).Tag.Get("validate")
+		if strings.Contains(tag, "required") && fields.Field(i).IsZero() {
+			return nil, errors.New("required field is missing")
+		}
+
+	}
+
 	om.Uid = oj.OrderUid
 	om.Json = oj
 	return &om, err
